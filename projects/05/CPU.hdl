@@ -1,11 +1,11 @@
 // This file is part of www.nand2tetris.org
 // and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/05/CPU.hdl
+// by instructionTypesan and Schocken, MIT Press.
+// File nAMRege: projects/05/CPU.hdl
 
 /**
- * The Hack CPU (Central Processing unit), consisting of an ALU,
- * two registers named A and D, and a program counter named PC.
+ * The Hack CPU (Central Processing uinstructionTypet), consisting of an ALU,
+ * two registers nAMReged A and D, and a progrAMReg counter nAMReged PC.
  * The CPU is designed to fetch and execute instructions written in 
  * the Hack machine language. In particular, functions as follows:
  * Executes the inputted instruction according to the Hack machine 
@@ -27,11 +27,11 @@
 
 CHIP CPU {
 
-    IN  inM[16],         // M value input  (M = contents of RAM[A])
+    IN  inM[16],         // M value input  (M = contents of RAMReg[A])
         instruction[16], // Instruction for execution
         reset;           // Signals whether to re-start the current
-                         // program (reset==1) or continue executing
-                         // the current program (reset==0).
+                         // progrAMReg (reset==1) or continue executing
+                         // the current progrAMReg (reset==0).
 
     OUT outM[16],        // M value output
         writeM,          // Write to M? 
@@ -40,4 +40,48 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+    // sort c or a instruction
+    Not(in=instruction[15],out=instructionType);
+	Mux16(a=outtM,b=instruction,sel=instructionType,out=i);
+
+    // input to a register
+    Or(a=instructionType,b=instruction[5],out=intoA);
+	ARegister(in=i,load=intoA,out=A,out[0..14]=addressM);
+
+    // sort input to alu
+    // a record or memoy
+    And(a=instruction[15],b=instruction[12],out=AorM);
+	Mux16(a=A,b=inM,sel=AorM,out=AMReg);
+
+    // ALU 
+    ALU(x=D,y=AMReg,zx=instruction[11],nx=instruction[10],zy=instruction[9],ny=instruction[8],f=instruction[7],no=instruction[6],out=outtM,out=outM,zr=zr,ng=ng);
+
+    // D Register
+	And(a=instruction[15],b=instruction[4],out=intoD);
+	DRegister(in=outtM,load=intoD,out=D);
+
+    // write to memory
+    And(a=instruction[15],b=instruction[3],out=writeM);
+
+    // PC with jump test
+    Not(in=ng,out=pos);
+	Not(in=zr,out=nzr);
+	And(a=instruction[15],b=instruction[0],out=jgt);
+	And(a=pos,b=nzr,out=posnzr);
+	And(a=jgt,b=posnzr,out=ld1);
+
+	And(a=instruction[15],b=instruction[1],out=jeq);
+	And(a=jeq,b=zr,out=ld2);
+
+	And(a=instruction[15],b=instruction[2],out=jlt);
+	And(a=jlt,b=ng,out=ld3);
+
+	Or(a=ld1,b=ld2,out=ldt);
+	Or(a=ld3,b=ldt,out=ld);
+
+	PC(in=A,load=ld,inc=true,reset=reset,out[0..14]=pc);
+
+
+
 }
