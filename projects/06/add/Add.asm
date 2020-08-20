@@ -4,10 +4,12 @@
 // File name: projects/06/add/Add.asm
 
 // Computes R0 = 2 + 3  (R0 refers to RAM[0])
-
+(LOOP)
 @2
 D=A
+(START)
 @3
 D=D+A
+(END)
 @0
 M=D
