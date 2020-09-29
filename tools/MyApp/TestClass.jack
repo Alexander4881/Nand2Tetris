@@ -1,0 +1,10 @@
+class TestClass{
+    function void TestClass(){
+        do Output.printString("Hello World from TestClass");
+        do Output.println();
+        do Output.printString("Hello World from TestClass");
+        do Output.println();
+
+        return;
+    }
+}

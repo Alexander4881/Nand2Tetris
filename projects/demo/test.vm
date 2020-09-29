@@ -1,0 +1,2 @@
+sp = 256
+call sys.init

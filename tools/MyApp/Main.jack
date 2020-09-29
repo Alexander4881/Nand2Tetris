@@ -1,0 +1,35 @@
+class Main{
+    
+    
+    function void main (){
+        
+        let keyDown = keyPressed();
+
+
+
+
+         
+        // right arrow
+        if(keyDown == 132){
+            do Output.printString("Right");
+            do Output.println();    
+        } // left arrow 
+        else if(keyDown == 130)
+        {
+            do Output.printString("Left");
+            do Output.println();
+        } // up arrow
+        else if(keyDown == 131)
+        {
+            do Output.printString("Up");
+            do Output.println();
+        } // down arrow
+        else if (keyDown == 133)
+        {
+            do Output.printString("Down");
+            do Output.println();
+        }
+
+        return;
+    }
+}
